@@ -8,10 +8,10 @@ const server = createServer({
     cert: readFileSync('./andyxie.cn.pem'),
     key: readFileSync("./andyxie.cn.key")
 })
-// const wss = new ws.WebSocketServer({server})
-const wss = new ws.WebSocketServer({
-    port: "8090"
-})
+const wss = new ws.WebSocketServer({server})
+// const wss = new ws.WebSocketServer({
+//     port: "8090"
+// })
 
 wss.on('connection', function (ws, req) {
     console.log("Connected from: " + req.socket.remoteAddress)
@@ -77,4 +77,4 @@ wss.on('close', (ws) => {
 })
 
 
-// server.listen(8090)
+server.listen(8090)
