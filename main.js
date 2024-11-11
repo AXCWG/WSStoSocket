@@ -42,7 +42,12 @@ wss.on('connection', function (ws, req) {
         //         message: ex, 
         //     })+"\n")
         // }
-        var preprocess = JSON.parse(data.toString())
+        try{
+            var preprocess = JSON.parse(data.toString())
+
+        }catch(ex){
+            ws.send(ex)
+        }
 
         if (preprocess.type === 0) {
             try {
