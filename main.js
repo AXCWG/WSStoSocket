@@ -46,7 +46,7 @@ wss.on('connection', function (ws, req) {
             var preprocess = JSON.parse(data.toString())
 
         }catch(ex){
-            ws.send(ex)
+            ws.send(ex.toString())
         }
 
         if (preprocess.type === 0) {
