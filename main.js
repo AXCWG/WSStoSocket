@@ -40,7 +40,7 @@ wss.on('connection', function (ws, req) {
                         client.write("iwtcms_login " + crypto.createHash('sha256').update(preprocess.password).digest('hex') + "\n")
                     })
                 }catch(ex){
-                    ws.send(ex.toString())
+                    ws.send(JSON.stringify({status: 1, message: ex.toString()}))
                 }
                 
             } catch (ex) {
