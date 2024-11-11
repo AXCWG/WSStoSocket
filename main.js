@@ -18,30 +18,7 @@ wss.on('connection', function (ws, req) {
     var client = new net.Socket();
 
     ws.on("message", (data) => {
-        // console.log(data.toJSON())
-        // console.log(data.toString())
-        // var wsInfo = JSON.parse(data.toString())
-        // try {
-        //     ws.on("close", ()=>{
-        //         client.destroy(); 
-        //     })
-        //     var client = new net.Socket();
-        //     client.connect(wsInfo.host.split(":")[1], wsInfo.host.split(":")[0], () => {
-        //         client.on("data", (data) => {
-        //             console.log(data.toString())
-        //             ws.send(data.toString())
-
-        //         })
-        //         client.write("iwtcms_login " + crypto.createHash('sha256').update(wsInfo.password).digest('hex') + "\n")
-        //         console.log("connected. ")
-
-        //     })
-        // } catch (ex) {
-        //     ws.send(JSON.stringify({
-        //         status: "failed",
-        //         message: ex, 
-        //     })+"\n")
-        // }
+        
         try{
             var preprocess = JSON.parse(data.toString())
 
@@ -54,15 +31,20 @@ wss.on('connection', function (ws, req) {
                 ws.on("close", () => {
                     client.destroy()
                 })
-                client.connect(preprocess.host.split(":")[1], preprocess.host.split(":")[0], () => {
-                    client.on("data", (data) => {
-                        ws.send(data.toString())
+                try{
+                    client.connect(preprocess.host.split(":")[1], preprocess.host.split(":")[0], () => {
+                        client.on("data", (data) => {
+                            ws.send(data.toString())
+                        })
+    
+                        client.write("iwtcms_login " + crypto.createHash('sha256').update(preprocess.password).digest('hex') + "\n")
                     })
-
-                    client.write("iwtcms_login " + crypto.createHash('sha256').update(preprocess.password).digest('hex') + "\n")
-                })
+                }catch(ex){
+                    ws.send(ex.toString())
+                }
+                
             } catch (ex) {
-                ws.send("Login failed! " + ex + "\n")
+                ws.send("Login failed! " + ex.toString() + "\n")
             }
 
         }
